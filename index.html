@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WayFare | Discover Your Next Horizon</title>
+    
+    <!-- Link the vanilla CSS instead of Tailwind -->
+    <link rel="stylesheet" href="/assets/css/vanilla.css">
+
+    <!-- Swup for smooth page transitions -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase.js"></script>
+    <script src="https://unpkg.com/swup@4"></script>
+    
+    <style>
+        .transition-fade {
+            transition: 0.4s ease-out;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        html.is-animating .transition-fade {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor Setup -->
+    <wayfare-cursor></wayfare-cursor>
+
+    <!-- Our Custom Nav Component -->
+    <wayfare-nav></wayfare-nav>
+
+    <!-- Main Swup Container -->
+    <main id="swup" class="transition-fade">
+        <!-- Hero Section -->
+    <section class="hero">
+        <!-- Flying birds in background -->
+        <div class="bird-container bird-container--one">
+            <div class="bird bird--one"></div>
+        </div>
+        <div class="bird-container bird-container--two">
+            <div class="bird bird--two"></div>
+        </div>
+        
+        <div class="container hero-grid">
+            <div class="hero-content animate-on-scroll">
+                <h1 class="display-title">
+                    Find Your Next <br/>
+                    Adventure
+                </h1>
+                <p class="subtitle">
+                    Great journeys for the modern traveler. Explore new places and enjoy exciting, memorable experiences around the world.
+                </p>
+                <div class="hero-actions">
+                    <a href="index.html#collections" data-no-swup class="btn-primary">
+                        Start Exploring
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+                    <a href="#collections" class="btn-outline">
+                        View Collections
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image-wrapper animate-on-scroll" style="transition-delay: 0.2s;">
+                <img alt="Hero Destination" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80&w=1200">
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Locations Section -->
+    <section id="collections" class="bg-card-section">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Top Locations</h2>
+            <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">Discover our most sought-after destinations around the globe.</p>
+
+            <div class="grid-3">
+                <!-- Tour Card 1 -->
+                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.1s;">
+                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Tokyo Culture Circuit')">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <div class="tour-image">
+                        <img alt="Tokyo Culture Circuit" src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&q=80&w=1000">
+                    </div>
+                    <div class="tour-content">
+                        <div class="tour-tags">
+                            <span class="tag">Cultural</span>
+                            <span class="tag">Tokyo, Japan</span>
+                        </div>
+                        <h3 class="tour-title">Tokyo Culture Circuit</h3>
+                        <p class="tour-desc">Experience the bustling city life blended with ancient traditions and cultural landmarks.</p>
+                        <div class="tour-meta">
+                            <span>7 Days</span>
+                            <span class="tour-price">From $2,100</span>
+                        </div>
+                        <span class="btn-see-more">See more..</span>
+                    </div>
+                </a>
+
+                <!-- Tour Card 2 -->
+                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.2s;">
+                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Santorini Sunsets')">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <div class="tour-image">
+                        <img alt="Santorini Sunsets" src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&q=80&w=1000">
+                    </div>
+                    <div class="tour-content">
+                        <div class="tour-tags">
+                            <span class="tag">Luxury</span>
+                            <span class="tag">Santorini, Greece</span>
+                        </div>
+                        <h3 class="tour-title">Santorini Sunsets</h3>
+                        <p class="tour-desc">Enjoy breathtaking sunsets, iconic architecture, and pristine Mediterranean waters.</p>
+                        <div class="tour-meta">
+                            <span>6 Days</span>
+                            <span class="tour-price">From $2,500</span>
+                        </div>
+                        <span class="btn-see-more">See more..</span>
+                    </div>
+                </a>
+
+                <!-- Tour Card 3 -->
+                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.3s;">
+                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Bali Bliss Retreat')">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <div class="tour-image">
+                        <img alt="Bali Bliss Retreat" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=1000">
+                    </div>
+                    <div class="tour-content">
+                        <div class="tour-tags">
+                            <span class="tag">Beach</span>
+                            <span class="tag">Bali, Indonesia</span>
+                        </div>
+                        <h3 class="tour-title">Bali Bliss Retreat</h3>
+                        <p class="tour-desc">Unwind on tropical beaches and explore serene temples nestled in the lush jungles of Bali.</p>
+                        <div class="tour-meta">
+                            <span>8 Days</span>
+                            <span class="tour-price">From $1,350</span>
+                        </div>
+                        <span class="btn-see-more">See more..</span>
+                    </div>
+                </a>
+                
+                <!-- Tour Card 4 -->
+                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.4s;">
+                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Swiss Alps Explorer')">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <div class="tour-image">
+                        <img alt="Swiss Alps Explorer" src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&q=80&w=1000">
+                    </div>
+                    <div class="tour-content">
+                        <div class="tour-tags">
+                            <span class="tag">Adventure</span>
+                            <span class="tag">Interlaken, Switzerland</span>
+                        </div>
+                        <h3 class="tour-title">Swiss Alps Explorer</h3>
+                        <p class="tour-desc">Discover majestic mountains, clear alpine lakes, and thrilling outdoor activities.</p>
+                        <div class="tour-meta">
+                            <span>7 Days</span>
+                            <span class="tour-price">From $3,200</span>
+                        </div>
+                        <span class="btn-see-more">See more..</span>
+                    </div>
+                </a>
+
+                <!-- Tour Card 5 -->
+                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.5s;">
+                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Kenya Safari Quest')">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <div class="tour-image">
+                        <img alt="Kenya Safari Quest" src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=1000">
+                    </div>
+                    <div class="tour-content">
+                        <div class="tour-tags">
+                            <span class="tag">Wildlife</span>
+                            <span class="tag">Masai Mara, Kenya</span>
+                        </div>
+                        <h3 class="tour-title">Kenya Safari Quest</h3>
+                        <p class="tour-desc">Experience the thrill of the wild with guided safaris across the breathtaking African savanna.</p>
+                        <div class="tour-meta">
+                            <span>10 Days</span>
+                            <span class="tour-price">From $4,500</span>
+                        </div>
+                        <span class="btn-see-more">See more..</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section>
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Why Choose Us</h2>
+            <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">We go beyond standard booking to offer meaningful travel experiences you won't forget.</p>
+            
+            <div class="features-grid">
+                <div class="feature-item animate-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="feature-icon"><i data-lucide="map"></i></div>
+                    <h3 class="feature-title">Hand-picked Locations</h3>
+                    <p class="feature-desc">Every destination is carefully selected by our experts to ensure you get the best out of your trip.</p>
+                </div>
+                <div class="feature-item animate-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="feature-icon"><i data-lucide="users"></i></div>
+                    <h3 class="feature-title">Local Guides</h3>
+                    <p class="feature-desc">Meet locals and guides who know the area inside out, giving you a real feel for the place.</p>
+                </div>
+                <div class="feature-item animate-on-scroll" style="transition-delay: 0.3s;">
+                    <div class="feature-icon"><i data-lucide="leaf"></i></div>
+                    <h3 class="feature-title">Eco-friendly Travel</h3>
+                    <p class="feature-desc">We choose accommodations and travel methods that care for the environment and support local communities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section>
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">How It Works</h2>
+            <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">Three simple steps to embark on your next unforgettable journey.</p>
+            
+            <div class="steps-grid">
+                <div class="step-item animate-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="step-number">01</div>
+                    <h3 class="step-title">Discover</h3>
+                    <p class="step-desc">Browse our curated collections of authentic, slow travel experiences and find the perfect match for your travel style.</p>
+                </div>
+                <div class="step-item animate-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="step-number">02</div>
+                    <h3 class="step-title">Customize</h3>
+                    <p class="step-desc">Work with our expert local guides to tailor your itinerary, ensuring your journey perfectly aligns with your interests.</p>
+                </div>
+                <div class="step-item animate-on-scroll" style="transition-delay: 0.3s;">
+                    <div class="step-number">03</div>
+                    <h3 class="step-title">Experience</h3>
+                    <p class="step-desc">Pack your bags and immerse yourself in the destination, creating lifelong memories through meaningful cultural connections.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="bg-card-section">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">What Our Travelers Say</h2>
+            <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">Read stories from people who have explored the world with us.</p>
+            
+            <div class="testimonials-grid" id="testimonial-container">
+                <div class="testimonial-card animate-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="testimonial-flipper" id="flipper-1">
+                        <div class="testimonial-card-inner">
+                            <div class="testimonial-front">
+                                <i data-lucide="quote" class="quote-icon"></i>
+                                <p class="testimonial-text">"I thought I knew Kyoto, but this trip showed me a completely different city. The guides were amazing and the whole experience was unforgettable."</p>
+                                <div class="testimonial-author">
+                                    <img class="author-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" alt="Elena R.">
+                                    <div class="author-info">
+                                        <h4>Elena R.</h4>
+                                        <p>Architect, Milan</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="testimonial-back">
+                                <i data-lucide="quote" class="quote-icon"></i>
+                                <p class="testimonial-text">"Our family trip to the Swiss Alps exceeded all expectations. The seamless planning and attention to our needs made it perfect."</p>
+                                <div class="testimonial-author">
+                                    <img class="author-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Sarah J.">
+                                    <div class="author-info">
+                                        <h4>Sarah J.</h4>
+                                        <p>Designer, London</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card animate-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="testimonial-flipper" id="flipper-2">
+                        <div class="testimonial-card-inner">
+                            <div class="testimonial-front">
+                                <i data-lucide="quote" class="quote-icon"></i>
+                                <p class="testimonial-text">"The hiking trip was perfectly planned. We stayed with local families and enjoyed meals you won't find in any standard tour. Highly recommended!"</p>
+                                <div class="testimonial-author">
+                                    <img class="author-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="Marcus T.">
+                                    <div class="author-info">
+                                        <h4>Marcus T.</h4>
+                                        <p>Writer, New York</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="testimonial-back">
+                                <i data-lucide="quote" class="quote-icon"></i>
+                                <p class="testimonial-text">"From the bustling souks to the quiet desert nights, the Morocco journey was truly a once-in-a-lifetime adventure."</p>
+                                <div class="testimonial-author">
+                                    <img class="author-img" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150" alt="David M.">
+                                    <div class="author-info">
+                                        <h4>David M.</h4>
+                                        <p>Photographer, Berlin</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section>
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">About Us</h2>
+            <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">We are passionate travelers dedicated to creating authentic and unforgettable journeys.</p>
+            <div class="about-grid animate-on-scroll" style="margin-top: 3rem; transition-delay: 0.2s;">
+                <div class="about-image">
+                    <img class="about-img-stack about-img-1" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000" alt="About WayFare 1">
+                    <img class="about-img-stack about-img-2" src="https://images.unsplash.com/photo-1504150558240-1bdf2a07c9b4?auto=format&fit=crop&q=80&w=1000" alt="About WayFare 2">
+                    <img class="about-img-stack about-img-3" src="https://images.unsplash.com/photo-1517400508447-f8dd518b86db?auto=format&fit=crop&q=80&w=1000" alt="About WayFare 3">
+                </div>
+                <div class="about-content" style="display: flex; flex-direction: column; justify-content: center; gap: 1.5rem;">
+                    <h3 style="font-size: 1.8rem; color: var(--color-terracotta);">Our Mission</h3>
+                    <p style="color: var(--color-text-muted); line-height: 1.6;">At WayFare, we believe travel is more than just visiting a new place. It's about connecting with local cultures, exploring responsibly, and creating memories that last a lifetime.</p>
+                    <p style="color: var(--color-text-muted); line-height: 1.6;">Since our founding, we've focused on slow travel, ensuring every trip leaves a positive impact on both the traveler and the destination.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="bg-card-section">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Frequently Asked Questions</h2>
+            <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">Got questions? We've got answers.</p>
+            
+            <div class="faq-accordion animate-on-scroll" style="margin-top: 3rem; max-width: 800px; margin-inline: auto; transition-delay: 0.2s;">
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>What is slow travel?</span>
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <p>Slow travel is about taking the time to fully immerse yourself in a destination. It focuses on connection to local people, cultures, food, and music, rather than rushing through a checklist of tourist sites.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>Are flights included in the price?</span>
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <p>No, international flights are not included in our tour prices. We find that our travelers prefer the flexibility of booking their own flights to suit their schedules and preferred airlines.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>How big are the tour groups?</span>
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <p>We keep our groups small, typically between 6 to 12 travelers, to ensure a personalized and intimate experience while minimizing our impact on local communities.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>Can you cater to dietary restrictions?</span>
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <p>Yes, we can accommodate most dietary restrictions. Please let us know of any allergies or preferences when booking so we can inform our local guides and partners in advance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- Footer -->
+    <wayfare-footer></wayfare-footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <!-- 1. Lucide Icons Library -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- 2. Initialize Lucide Icons in the main document -->
+    <script>
+        if (typeof lucide !== "undefined") lucide.createIcons();
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            
+            // Limit to 2 toasts
+            const currentToasts = container.querySelectorAll('.toast');
+            if (currentToasts.length >= 2) {
+                const oldest = currentToasts[0];
+                oldest.classList.remove('show');
+                setTimeout(() => oldest.remove(), 300);
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icon = type === 'success' ? 'smile' : 'frown';
+            
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="toast-icon"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            if (typeof lucide !== "undefined") lucide.createIcons({ root: toast });
+            
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // FAQ Toggle Logic
+        function toggleFaq(btn) {
+            const item = btn.closest('.faq-item');
+            const isActive = item.classList.contains('active');
+            
+            document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+            
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Heart Icon Toggle Logic
+        async function toggleHeart(e, btn, tourName) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const userStr = localStorage.getItem('wayfare_user');
+            if (!userStr) {
+                window.location.href = '/login.html';
+                return;
+            }
+            const user = JSON.parse(userStr);
+            if (!user.id && window.supabaseClient) {
+                const { data } = await window.supabaseClient.from('profiles').select('*').limit(1);
+                if (data && data.length > 0) user.id = data[0].id;
+            }
+
+            const wasActive = btn.classList.contains('active');
+            btn.classList.toggle('active');
+            
+            // Add pulse animation class
+            btn.classList.add('animating');
+            setTimeout(() => btn.classList.remove('animating'), 600);
+
+            if (tourName) {
+                if (!wasActive) {
+                    showToast(`Added ${tourName} to your Wishlist`, 'success');
+                    if (typeof window.addNavNotification === 'function') {
+                        window.addNavNotification(`${tourName} added to wishlist`, 'heart', '/dashboard.html?section=wishlist');
+                    }
+                } else {
+                    showToast(`Removed ${tourName} from your Wishlist`, 'error');
+                    if (typeof window.addNavNotification === 'function') {
+                        window.addNavNotification(`${tourName} removed from wishlist`, 'heart', '/dashboard.html?section=wishlist');
+                    }
+                }
+            }
+
+            // Sync with local storage for instant feedback
+            let wishlist = [];
+            try {
+                wishlist = JSON.parse(localStorage.getItem('wayfare_wishlist')) || [];
+            } catch (e) {}
+
+            if (!wasActive) {
+                if (!wishlist.includes(tourName)) {
+                    wishlist.push(tourName);
+                }
+            } else {
+                wishlist = wishlist.filter(item => item !== tourName);
+            }
+            localStorage.setItem('wayfare_wishlist', JSON.stringify(wishlist));
+
+            if (window.supabaseClient) {
+                if (!wasActive) {
+                    // Try to find the package ID based on tour name to link it properly
+                    const { data: pkgData } = await window.supabaseClient.from('packages').select('id').eq('name', tourName).single();
+                    if (pkgData) {
+                        await window.supabaseClient.from('wishlist').insert({ user_id: user.id, package_id: pkgData.id });
+                    }
+                } else {
+                    const { data: pkgData } = await window.supabaseClient.from('packages').select('id').eq('name', tourName).single();
+                    if (pkgData) {
+                        await window.supabaseClient.from('wishlist').delete().match({ user_id: user.id, package_id: pkgData.id });
+                    }
+                }
+            }
+        }
+
+        // Testimonials Flipping Logic
+        let flipIntervals = [];
+        
+        function initTestimonialFlipping() {
+            // Clear old intervals
+            flipIntervals.forEach(clearInterval);
+            flipIntervals = [];
+
+            const flippers = document.querySelectorAll('.testimonial-flipper');
+            if (flippers.length === 0) return;
+
+            // Flip first one every 8 seconds
+            flipIntervals.push(setInterval(() => {
+                if(document.body.contains(flippers[0])) flippers[0].classList.toggle('flip');
+            }, 8000));
+
+            // Flip second one every 8 seconds, offset by 4 seconds
+            setTimeout(() => {
+                flipIntervals.push(setInterval(() => {
+                    if (flippers[1] && document.body.contains(flippers[1])) {
+                        flippers[1].classList.toggle('flip');
+                    }
+                }, 8000));
+            }, 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', initTestimonialFlipping);
+    </script>
+    
+    <!-- 3. Our Custom Navigation Component -->
+    <script src="/assets/js/nav-component.js"></script>
+    <script src="/assets/js/footer-component.js"></script>
+
+    <!-- 4. Custom Cursor Logic -->
+    <script src="/assets/js/cursor-component.js"></script>
+    <script src="/assets/js/contact.js"></script>
+
+    <!-- 5. Swup SPA Navigation and Scroll Animations -->
+    <script>
+        const swup = typeof Swup !== "undefined" ? new Swup() : null;
+        
+        // Intersection Observer for scroll animations
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Initialize on first load
+        document.addEventListener('DOMContentLoaded', initScrollAnimations);
+        
+        // Immediately update nav on click (before transition)
+        if (swup) swup.hooks.on('visit:start', (visit) => {
+            const nav = document.querySelector('wayfare-nav');
+            if (nav && typeof nav.updateActiveTab === 'function') {
+                nav.updateActiveTab(visit.to.url);
+            }
+        });
+
+        async function initWishlistState() {
+            try {
+                const userStr = localStorage.getItem('wayfare_user');
+                if (!userStr) return;
+                const user = JSON.parse(userStr);
+                
+                let wishlist = [];
+                if (window.supabaseClient) {
+                    if (!user.id) {
+                        const { data: fallback } = await window.supabaseClient.from('profiles').select('*').limit(1);
+                        if (fallback && fallback.length > 0) user.id = fallback[0].id;
+                    }
+                    const { data } = await window.supabaseClient.from('wishlist').select('packages(name)').eq('user_id', user.id);
+                    if (data) {
+                        wishlist = data.map(w => w.packages?.name).filter(Boolean);
+                        localStorage.setItem('wayfare_wishlist', JSON.stringify(wishlist));
+                    }
+                } else {
+                    wishlist = JSON.parse(localStorage.getItem('wayfare_wishlist')) || [];
+                }
+
+                const buttons = document.querySelectorAll('.wishlist-btn');
+                buttons.forEach(btn => {
+                    const onclickStr = btn.getAttribute('onclick') || '';
+                    const match = onclickStr.match(/toggleHeart\(event, this, \'([^\']+)\'\)/);
+                    if (match && match[1]) {
+                        if (wishlist.includes(match[1])) {
+                            btn.classList.add('active');
+                        }
+                    }
+                });
+            } catch(e) {}
+        }
+        document.addEventListener('DOMContentLoaded', initWishlistState);
+
+        // Re-initialize lucide icons when content is replaced by Swup
+        if (swup) swup.hooks.on('content:replace', () => {
+            if (typeof lucide !== "undefined") lucide.createIcons();
+            initScrollAnimations();
+            initTestimonialFlipping();
+            initWishlistState();
+            if (typeof window.initContactForm === 'function') window.initContactForm();
+            const nav = document.querySelector('wayfare-nav');
+            if (nav && typeof nav.updateActiveTab === 'function') {
+                nav.updateActiveTab();
+            }
+        });
+    </script>
+</body>
+</html>

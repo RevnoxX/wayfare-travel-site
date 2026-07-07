@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - WayFare</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="/assets/css/vanilla.css">
+    
+    <!-- Custom Elements -->
+    <script src="/assets/js/nav-component.js"></script>
+    <script src="/assets/js/footer-component.js"></script>
+    <script src="/assets/js/cursor-component.js"></script>
+    <script src="/assets/js/contact.js"></script>
+
+</head>
+<body>
+    <wayfare-cursor></wayfare-cursor>
+    <wayfare-nav></wayfare-nav>
+    
+    <main id="swup" class="transition-fade contact-container">
+        <div class="bird-container bird-container--one">
+            <div class="bird bird--one"></div>
+        </div>
+        <div class="bird-container bird-container--two">
+            <div class="bird bird--two"></div>
+        </div>
+        <div class="contact-header">
+            <h1>Get in Touch</h1>
+            <p>Whether you're planning your next adventure, sharing a review, or just saying hello, we'd love to hear from you.</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i data-lucide="map-pin"></i>
+                    </div>
+                    <h3>Our Headquarters</h3>
+                    <p>123 Explorer's Way<br>Wanderlust District<br>New York, NY 10001</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i data-lucide="phone"></i>
+                    </div>
+                    <h3>Direct Contact</h3>
+                    <p>Phone: +1 (555) 123-4567<br>Email: hello@wayfare.com<br>Support: support@wayfare.com</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i data-lucide="clock"></i>
+                    </div>
+                    <h3>Working Hours</h3>
+                    <p>Monday - Friday: 9:00 AM - 6:00 PM (EST)<br>Saturday: 10:00 AM - 2:00 PM (EST)<br>Sunday: Closed</p>
+                </div>
+            </div>
+
+            <div class="contact-form-wrapper">
+                <div class="type-selector">
+                    <button type="button" class="type-btn active" data-type="query" onclick="selectType('query')">
+                        <i data-lucide="help-circle"></i>
+                        General Query
+                    </button>
+                    <button type="button" class="type-btn" data-type="support" onclick="selectType('support')">
+                        <i data-lucide="life-buoy"></i>
+                        Support
+                    </button>
+                    <button type="button" class="type-btn" data-type="review" onclick="selectType('review')">
+                        <i data-lucide="star"></i>
+                        Review
+                    </button>
+                </div>
+
+                <div class="cartoon-container" style="text-align: center; margin: 1.5rem 0; position: relative; height: 120px;">
+                    <svg id="cartoon" width="120" height="120" viewBox="0 0 120 120" style="margin: auto; display: block; overflow: visible;">
+                        <!-- Head/Ears -->
+                        <path d="M 20 40 L 25 10 L 50 30 C 56 28 64 28 70 30 L 95 10 L 100 40 C 110 55 110 80 90 95 C 75 105 45 105 30 95 C 10 80 10 55 20 40 Z" fill="#1e293b" />
+                        <!-- Inner Ears -->
+                        <path d="M 28 22 L 30 35 L 42 35 Z" fill="#cbd5e1" />
+                        <path d="M 92 22 L 90 35 L 78 35 Z" fill="#cbd5e1" />
+                        <!-- Eyes -->
+                        <ellipse cx="40" cy="60" rx="14" ry="18" fill="#fde047" />
+                        <ellipse cx="80" cy="60" rx="14" ry="18" fill="#fde047" />
+                        <!-- Pupils -->
+                        <ellipse id="pupilL" cx="40" cy="60" rx="4" ry="12" fill="#0f172a" />
+                        <ellipse id="pupilR" cx="80" cy="60" rx="4" ry="12" fill="#0f172a" />
+                        <!-- Nose -->
+                        <path d="M 55 75 L 65 75 L 60 82 Z" fill="#f472b6" />
+                        <!-- Whiskers -->
+                        <path d="M 30 75 L 10 70 M 30 80 L 8 80 M 30 85 L 10 90" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
+                        <path d="M 90 75 L 110 70 M 90 80 L 112 80 M 90 85 L 110 90" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
+                        <!-- Mouth -->
+                        <path d="M 60 82 Q 55 90 45 85 M 60 82 Q 65 90 75 85" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+
+                <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                    <input type="hidden" id="inquiryType" name="type" value="query">
+                    
+                    <div id="userFieldsGroup">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Full Name</label>
+                            <input type="text" id="name" class="form-input" placeholder="John Doe">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address</label>
+                            <input type="email" id="email" class="form-input" placeholder="john@example.com">
+                        </div>
+                    </div>
+
+                    <div id="bookingRefGroup" class="form-group" style="display: none;">
+                        <label class="form-label" for="bookingRef">Select Booking</label>
+                        <select id="bookingRef" class="form-select">
+                            <option value="">Select a booking</option>
+                        </select>
+                    </div>
+
+                    <div id="reviewPackageGroup" class="form-group" style="display: none;">
+                        <label class="form-label" for="reviewPackage">Select Tour</label>
+                        <select id="reviewPackage" class="form-select">
+                            <option value="">Select an approved booking</option>
+                        </select>
+                    </div>
+
+                    <div id="ratingGroup" class="form-group" style="display: none;">
+                        <label class="form-label" for="rating">Rating</label>
+                        <select id="rating" class="form-select">
+                            <option value="5">5 Stars - Excellent</option>
+                            <option value="4">4 Stars - Very Good</option>
+                            <option value="3">3 Stars - Average</option>
+                            <option value="2">2 Stars - Poor</option>
+                            <option value="1">1 Star - Terrible</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-input" required placeholder="How can we help?">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">Your Message</label>
+                        <textarea id="message" class="form-textarea" required placeholder="Tell us more about your inquiry..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Send Message
+                        <i data-lucide="send"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <wayfare-footer></wayfare-footer>
+    <div id="toast-container" class="toast-container"></div>
+
+</body>
+</html>

@@ -27,10 +27,10 @@ async function initDashboard() {
     if (bookingsData) {
       dashboardRecentBookings = bookingsData.map(b => ({
         id: b.id,
-        user: b.profiles ? b.profiles.name : 'Unknown',
-        package: b.packages ? b.packages.name : 'Unknown',
+        user: b.client_name || (b.profiles ? b.profiles.name : "Unknown User"),
+        package: b.package_name || (b.packages ? b.packages.name : "Unknown Package"),
         date: b.travel_date,
-        status: b.status || 'Pending'
+        status: b.status ? (b.status.charAt(0).toUpperCase() + b.status.slice(1).toLowerCase()) : 'Pending'
       }));
     }
 
@@ -50,13 +50,13 @@ async function initDashboard() {
 
     if (allBookings) {
       allBookings.forEach(b => {
-        if(b.packages && b.packages.name) {
-            const name = b.packages.name;
-            packageCounts[name] = (packageCounts[name] || 0) + 1;
+        const pkgName = b.package_name || (b.packages ? b.packages.name : null);
+        if(pkgName) {
+            packageCounts[pkgName] = (packageCounts[pkgName] || 0) + 1;
         }
       });
       dashboardStats.totalBookings = allBookings.length;
-      dashboardStats.pendingApprovals = allBookings.filter(b => b.status === 'Pending').length;
+      dashboardStats.pendingApprovals = allBookings.filter(b => (b.status || 'Pending').toLowerCase() === 'pending').length;
     }
     
     dashboardPopularity = Object.keys(packageCounts)

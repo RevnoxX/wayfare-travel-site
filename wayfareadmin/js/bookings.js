@@ -23,11 +23,11 @@ async function initBookings() {
     if (data) {
       bookingsData = data.map(b => ({
         id: b.id,
-        user: b.profiles ? b.profiles.name : 'Unknown User',
-        package: b.packages ? b.packages.name : 'Unknown Package',
+        user: b.client_name || (b.profiles ? b.profiles.name : 'Unknown User'),
+        package: b.package_name || (b.packages ? b.packages.name : 'Unknown Package'),
         date: b.travel_date,
         travelers: b.travelers,
-        status: b.status || 'Pending'
+        status: b.status ? (b.status.charAt(0).toUpperCase() + b.status.slice(1).toLowerCase()) : 'Pending'
       }));
     }
   } catch (err) {

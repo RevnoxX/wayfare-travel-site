@@ -24,6 +24,7 @@ async function reviewsInit() {
         }
     } catch (err) {
         console.error(err);
+    window.reviews = reviews;
     }
     renderReviewForm();
     renderReviewList();

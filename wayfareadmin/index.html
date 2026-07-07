@@ -518,7 +518,14 @@
     // ── Boot ───────────────────────────────────────────────
     // Auth check happens in auth.js before this runs
     // Initialize the default section
-    showSection('dashboard');
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initDashboard === 'function' || typeof window.initDashboard === 'function') {
+            showSection('dashboard');
+        } else {
+            // fallback if modules take slightly longer
+            setTimeout(function() { showSection('dashboard'); }, 100);
+        }
+    });
   </script>
 
 </body>

@@ -16,6 +16,8 @@ export default defineConfig(({ mode }) => {
           main: resolve(__dirname, 'index.html'),
           login: resolve(__dirname, 'login.html'),
           dashboard: resolve(__dirname, 'dashboard.html'),
+          explore: resolve(__dirname, 'explore.html'),
+          booking: resolve(__dirname, 'booking.html'),
           contact: resolve(__dirname, 'contact.html'),
           wayfareadmin: resolve(__dirname, 'wayfareadmin/index.html')
         }

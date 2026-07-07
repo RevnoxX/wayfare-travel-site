@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WayFare | Explore Packages</title>
+    
+    <link rel="stylesheet" href="/assets/css/vanilla.css">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="/assets/js/supabase.js"></script>
+    
+    <!-- Custom Elements -->
+    <script type="module" src="/assets/js/nav-component.js"></script>
+    <script type="module" src="/assets/js/footer-component.js"></script>
+    <script type="module" src="/assets/js/cursor-component.js"></script>
+    <script src="https://unpkg.com/swup@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    
+</head>
+<body>
+    <wayfare-cursor></wayfare-cursor>
+    <wayfare-nav></wayfare-nav>
+    
+    <main id="swup" class="transition-fade">
+        <section class="explore-page bg-card-section">
+            <div class="container">
+                <h1 class="section-title text-center" style="margin-bottom: 1rem;">Explore Our Packages</h1>
+                <p class="subtitle text-center" style="margin-bottom: 3rem;">Find your perfect getaway from our curated selection.</p>
+                
+                <div class="search-container">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search by destination, name, or keywords...">
+                </div>
+
+                <div class="filter-bar" id="categoryFilters">
+                    <button class="filter-pill active" data-category="All">All</button>
+                    <!-- Categories will be injected here -->
+                </div>
+                
+                <div class="explore-grid" id="exploreGrid">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <wayfare-footer></wayfare-footer>
+    <div id="toast-container" class="toast-container"></div>
+    
+    <script type="module" src="/assets/js/explore-page.js"></script>
+    <script>
+        if (typeof lucide !== "undefined") lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -25,6 +25,7 @@ async function enquiriesInit() {
         }
     } catch (err) {
         console.error(err);
+    window.enquiries = enquiries;
     }
     renderEnquiries();
 }

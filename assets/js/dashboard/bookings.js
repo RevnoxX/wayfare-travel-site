@@ -17,11 +17,11 @@ async function bookingsInit() {
         if (data) {
             bookings = data.map(b => ({
                 id: b.id, package_id: b.package_id,
-                packageName: b.packages ? b.packages.name : 'Unknown',
-                destination: b.packages ? b.packages.destination : 'Unknown',
+                packageName: b.package_name || (b.packages ? b.packages.name : 'Unknown'),
+                destination: b.destination || (b.packages ? b.packages.destination : 'Unknown'),
                 travelDate: b.travel_date,
                 travelers: b.travelers,
-                amount: b.amount,
+                amount: b.total_price || b.amount,
                 status: b.status || 'pending',
                 paymentStatus: b.payment_status || 'Awaiting confirmation',
                 confirmationNo: b.confirmation_no || '—',
@@ -34,6 +34,7 @@ async function bookingsInit() {
         showToast("Failed to fetch bookings.", "error");
     }
     
+    window.bookings = bookings;
     renderBookings();
     attachCancelModalListeners();
 }

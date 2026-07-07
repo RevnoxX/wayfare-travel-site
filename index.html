@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WayFare | Discover Your Next Horizon</title>
@@ -12,18 +21,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="assets/js/supabase.js"></script>
     <script src="https://unpkg.com/swup@4"></script>
-    
-    <style>
-        .transition-fade {
-            transition: 0.4s ease-out;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        html.is-animating .transition-fade {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-    </style>
 </head>
 <body>
 
@@ -55,7 +52,7 @@
                     Great journeys for the modern traveler. Explore new places and enjoy exciting, memorable experiences around the world.
                 </p>
                 <div class="hero-actions">
-                    <a href="index.html#collections" data-no-swup class="btn-primary">
+                    <a href="/explore.html" data-no-swup class="btn-primary">
                         Start Exploring
                         <i data-lucide="arrow-right"></i>
                     </a>
@@ -76,121 +73,13 @@
             <h2 class="section-title animate-on-scroll">Top Locations</h2>
             <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">Discover our most sought-after destinations around the globe.</p>
 
-            <div class="grid-3">
-                <!-- Tour Card 1 -->
-                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.1s;">
-                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Tokyo Culture Circuit')">
-                        <i data-lucide="heart"></i>
-                    </button>
-                    <div class="tour-image">
-                        <img alt="Tokyo Culture Circuit" src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&q=80&w=1000">
-                    </div>
-                    <div class="tour-content">
-                        <div class="tour-tags">
-                            <span class="tag">Cultural</span>
-                            <span class="tag">Tokyo, Japan</span>
-                        </div>
-                        <h3 class="tour-title">Tokyo Culture Circuit</h3>
-                        <p class="tour-desc">Experience the bustling city life blended with ancient traditions and cultural landmarks.</p>
-                        <div class="tour-meta">
-                            <span>7 Days</span>
-                            <span class="tour-price">From $2,100</span>
-                        </div>
-                        <span class="btn-see-more">See more..</span>
-                    </div>
-                </a>
-
-                <!-- Tour Card 2 -->
-                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.2s;">
-                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Santorini Sunsets')">
-                        <i data-lucide="heart"></i>
-                    </button>
-                    <div class="tour-image">
-                        <img alt="Santorini Sunsets" src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&q=80&w=1000">
-                    </div>
-                    <div class="tour-content">
-                        <div class="tour-tags">
-                            <span class="tag">Luxury</span>
-                            <span class="tag">Santorini, Greece</span>
-                        </div>
-                        <h3 class="tour-title">Santorini Sunsets</h3>
-                        <p class="tour-desc">Enjoy breathtaking sunsets, iconic architecture, and pristine Mediterranean waters.</p>
-                        <div class="tour-meta">
-                            <span>6 Days</span>
-                            <span class="tour-price">From $2,500</span>
-                        </div>
-                        <span class="btn-see-more">See more..</span>
-                    </div>
-                </a>
-
-                <!-- Tour Card 3 -->
-                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.3s;">
-                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Bali Bliss Retreat')">
-                        <i data-lucide="heart"></i>
-                    </button>
-                    <div class="tour-image">
-                        <img alt="Bali Bliss Retreat" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=1000">
-                    </div>
-                    <div class="tour-content">
-                        <div class="tour-tags">
-                            <span class="tag">Beach</span>
-                            <span class="tag">Bali, Indonesia</span>
-                        </div>
-                        <h3 class="tour-title">Bali Bliss Retreat</h3>
-                        <p class="tour-desc">Unwind on tropical beaches and explore serene temples nestled in the lush jungles of Bali.</p>
-                        <div class="tour-meta">
-                            <span>8 Days</span>
-                            <span class="tour-price">From $1,350</span>
-                        </div>
-                        <span class="btn-see-more">See more..</span>
-                    </div>
-                </a>
-                
-                <!-- Tour Card 4 -->
-                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.4s;">
-                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Swiss Alps Explorer')">
-                        <i data-lucide="heart"></i>
-                    </button>
-                    <div class="tour-image">
-                        <img alt="Swiss Alps Explorer" src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&q=80&w=1000">
-                    </div>
-                    <div class="tour-content">
-                        <div class="tour-tags">
-                            <span class="tag">Adventure</span>
-                            <span class="tag">Interlaken, Switzerland</span>
-                        </div>
-                        <h3 class="tour-title">Swiss Alps Explorer</h3>
-                        <p class="tour-desc">Discover majestic mountains, clear alpine lakes, and thrilling outdoor activities.</p>
-                        <div class="tour-meta">
-                            <span>7 Days</span>
-                            <span class="tour-price">From $3,200</span>
-                        </div>
-                        <span class="btn-see-more">See more..</span>
-                    </div>
-                </a>
-
-                <!-- Tour Card 5 -->
-                <a href="#" data-no-swup class="tour-card animate-on-scroll" style="transition-delay: 0.5s;">
-                    <button class="wishlist-btn" onclick="toggleHeart(event, this, 'Kenya Safari Quest')">
-                        <i data-lucide="heart"></i>
-                    </button>
-                    <div class="tour-image">
-                        <img alt="Kenya Safari Quest" src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=1000">
-                    </div>
-                    <div class="tour-content">
-                        <div class="tour-tags">
-                            <span class="tag">Wildlife</span>
-                            <span class="tag">Masai Mara, Kenya</span>
-                        </div>
-                        <h3 class="tour-title">Kenya Safari Quest</h3>
-                        <p class="tour-desc">Experience the thrill of the wild with guided safaris across the breathtaking African savanna.</p>
-                        <div class="tour-meta">
-                            <span>10 Days</span>
-                            <span class="tour-price">From $4,500</span>
-                        </div>
-                        <span class="btn-see-more">See more..</span>
-                    </div>
-                </a>
+            <div class="grid-3" id="topLocationsGrid">
+                <!-- Will be dynamically populated from DB -->
+                <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--color-secondary);">fetching...</div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="/explore.html" data-no-swup class="btn-outline">View All Packages</a>
             </div>
         </div>
     </section>
@@ -253,6 +142,8 @@
             <h2 class="section-title animate-on-scroll">What Our Travelers Say</h2>
             <p class="subtitle text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto; transition-delay: 0.1s;">Read stories from people who have explored the world with us.</p>
             
+            
+            
             <div class="testimonials-grid" id="testimonial-container">
                 <div class="testimonial-card animate-on-scroll" style="transition-delay: 0.1s;">
                     <div class="testimonial-flipper" id="flipper-1">
@@ -312,6 +203,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -399,39 +291,6 @@
         if (typeof lucide !== "undefined") lucide.createIcons();
 
         // Toast Notification System
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            
-            // Limit to 2 toasts
-            const currentToasts = container.querySelectorAll('.toast');
-            if (currentToasts.length >= 2) {
-                const oldest = currentToasts[0];
-                oldest.classList.remove('show');
-                setTimeout(() => oldest.remove(), 300);
-            }
-            
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            const icon = type === 'success' ? 'smile' : 'frown';
-            
-            toast.innerHTML = `
-                <i data-lucide="${icon}" class="toast-icon"></i>
-                <span>${message}</span>
-            `;
-            container.appendChild(toast);
-            if (typeof lucide !== "undefined") lucide.createIcons({ root: toast });
-            
-            // Trigger animation
-            setTimeout(() => toast.classList.add('show'), 10);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
         // FAQ Toggle Logic
         function toggleFaq(btn) {
             const item = btn.closest('.faq-item');
@@ -445,73 +304,6 @@
         }
 
         // Heart Icon Toggle Logic
-        async function toggleHeart(e, btn, tourName) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const userStr = localStorage.getItem('wayfare_user');
-            if (!userStr) {
-                window.location.href = '/login.html';
-                return;
-            }
-            const user = JSON.parse(userStr);
-            if (!user.id && window.supabaseClient) {
-                const { data } = await window.supabaseClient.from('profiles').select('*').limit(1);
-                if (data && data.length > 0) user.id = data[0].id;
-            }
-
-            const wasActive = btn.classList.contains('active');
-            btn.classList.toggle('active');
-            
-            // Add pulse animation class
-            btn.classList.add('animating');
-            setTimeout(() => btn.classList.remove('animating'), 600);
-
-            if (tourName) {
-                if (!wasActive) {
-                    showToast(`Added ${tourName} to your Wishlist`, 'success');
-                    if (typeof window.addNavNotification === 'function') {
-                        window.addNavNotification(`${tourName} added to wishlist`, 'heart', '/dashboard.html?section=wishlist');
-                    }
-                } else {
-                    showToast(`Removed ${tourName} from your Wishlist`, 'error');
-                    if (typeof window.addNavNotification === 'function') {
-                        window.addNavNotification(`${tourName} removed from wishlist`, 'heart', '/dashboard.html?section=wishlist');
-                    }
-                }
-            }
-
-            // Sync with local storage for instant feedback
-            let wishlist = [];
-            try {
-                wishlist = JSON.parse(localStorage.getItem('wayfare_wishlist')) || [];
-            } catch (e) {}
-
-            if (!wasActive) {
-                if (!wishlist.includes(tourName)) {
-                    wishlist.push(tourName);
-                }
-            } else {
-                wishlist = wishlist.filter(item => item !== tourName);
-            }
-            localStorage.setItem('wayfare_wishlist', JSON.stringify(wishlist));
-
-            if (window.supabaseClient) {
-                if (!wasActive) {
-                    // Try to find the package ID based on tour name to link it properly
-                    const { data: pkgData } = await window.supabaseClient.from('packages').select('id').eq('name', tourName).single();
-                    if (pkgData) {
-                        await window.supabaseClient.from('wishlist').insert({ user_id: user.id, package_id: pkgData.id });
-                    }
-                } else {
-                    const { data: pkgData } = await window.supabaseClient.from('packages').select('id').eq('name', tourName).single();
-                    if (pkgData) {
-                        await window.supabaseClient.from('wishlist').delete().match({ user_id: user.id, package_id: pkgData.id });
-                    }
-                }
-            }
-        }
-
         // Testimonials Flipping Logic
         let flipIntervals = [];
         
@@ -572,60 +364,41 @@
         document.addEventListener('DOMContentLoaded', initScrollAnimations);
         
         // Immediately update nav on click (before transition)
-        if (swup) swup.hooks.on('visit:start', (visit) => {
+        if (swup && swup.hooks) swup.hooks.on('visit:start', (visit) => {
             const nav = document.querySelector('wayfare-nav');
             if (nav && typeof nav.updateActiveTab === 'function') {
                 nav.updateActiveTab(visit.to.url);
             }
         });
 
-        async function initWishlistState() {
-            try {
-                const userStr = localStorage.getItem('wayfare_user');
-                if (!userStr) return;
-                const user = JSON.parse(userStr);
-                
-                let wishlist = [];
-                if (window.supabaseClient) {
-                    if (!user.id) {
-                        const { data: fallback } = await window.supabaseClient.from('profiles').select('*').limit(1);
-                        if (fallback && fallback.length > 0) user.id = fallback[0].id;
-                    }
-                    const { data } = await window.supabaseClient.from('wishlist').select('packages(name)').eq('user_id', user.id);
-                    if (data) {
-                        wishlist = data.map(w => w.packages?.name).filter(Boolean);
-                        localStorage.setItem('wayfare_wishlist', JSON.stringify(wishlist));
-                    }
-                } else {
-                    wishlist = JSON.parse(localStorage.getItem('wayfare_wishlist')) || [];
-                }
-
-                const buttons = document.querySelectorAll('.wishlist-btn');
-                buttons.forEach(btn => {
-                    const onclickStr = btn.getAttribute('onclick') || '';
-                    const match = onclickStr.match(/toggleHeart\(event, this, \'([^\']+)\'\)/);
-                    if (match && match[1]) {
-                        if (wishlist.includes(match[1])) {
-                            btn.classList.add('active');
-                        }
-                    }
-                });
-            } catch(e) {}
-        }
-        document.addEventListener('DOMContentLoaded', initWishlistState);
+        document.addEventListener('DOMContentLoaded', window.initWishlistState);
 
         // Re-initialize lucide icons when content is replaced by Swup
-        if (swup) swup.hooks.on('content:replace', () => {
+        if (swup && swup.hooks) swup.hooks.on('content:replace', () => {
             if (typeof lucide !== "undefined") lucide.createIcons();
             initScrollAnimations();
             initTestimonialFlipping();
-            initWishlistState();
+            if (typeof window.initWishlistState === 'function') window.initWishlistState();
             if (typeof window.initContactForm === 'function') window.initContactForm();
+            if (typeof window.initTopLocations === 'function') window.initTopLocations();
             const nav = document.querySelector('wayfare-nav');
             if (nav && typeof nav.updateActiveTab === 'function') {
                 nav.updateActiveTab();
             }
+            window.dispatchEvent(new Event('scroll'));
         });
+    </script>
+
+    <script type="module">
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', window.initTopLocations);
+        } else {
+            if (typeof window.initTopLocations === 'function') {
+                window.initTopLocations();
+            } else {
+                setTimeout(() => { if (typeof window.initTopLocations === 'function') window.initTopLocations(); }, 100);
+            }
+        }
     </script>
 </body>
 </html>

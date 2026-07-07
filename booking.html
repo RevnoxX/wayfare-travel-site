@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WayFare | Package Details & Booking</title>
+    
+    <link rel="stylesheet" href="/assets/css/vanilla.css">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="/assets/js/supabase.js"></script>
+    
+    <!-- Custom Elements -->
+    <script type="module" src="/assets/js/nav-component.js"></script>
+    <script type="module" src="/assets/js/footer-component.js"></script>
+    <script type="module" src="/assets/js/cursor-component.js"></script>
+    <script src="https://unpkg.com/swup@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .booking-page {
+            padding-top: 100px;
+            padding-bottom: 4rem;
+            min-height: calc(100vh - 200px);
+        }
+        .booking-shell {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .booking-shell {
+                grid-template-columns: 1fr;
+            }
+        }
+        .detail-panel,
+        .booking-panel {
+            background: var(--color-card);
+            border: 1px solid var(--color-outline);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .detail-hero {
+            position: relative;
+            aspect-ratio: 16 / 8;
+            background: var(--color-outline);
+        }
+        .detail-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .detail-body,
+        .booking-panel {
+            padding: 2rem;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .detail-title {
+            font-size: 2.5rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+        .detail-desc {
+            color: var(--color-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .detail-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 500px) {
+            .detail-stats { grid-template-columns: 1fr; }
+        }
+        .detail-stat {
+            border: 1px solid var(--color-outline);
+            border-radius: 8px;
+            padding: 1rem;
+            background: rgba(138, 154, 134, 0.05);
+        }
+        .detail-stat span {
+            display: block;
+            color: var(--color-secondary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .detail-stat strong {
+            font-size: 1.1rem;
+            color: var(--color-text);
+        }
+        .itinerary-title,
+        .booking-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+        .detail-itinerary {
+            list-style: none;
+            display: grid;
+            gap: 1rem;
+        }
+        .detail-itinerary li {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 1rem;
+            border-top: 1px solid var(--color-outline);
+            padding-top: 1rem;
+        }
+        .detail-itinerary strong {
+            color: var(--color-primary);
+        }
+        .booking-form {
+            display: grid;
+            gap: 1.25rem;
+        }
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--color-outline);
+            border-radius: 6px;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: inherit;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+        .booking-summary {
+            border: 1px solid var(--color-outline);
+            border-radius: 8px;
+            padding: 1rem;
+            display: grid;
+            gap: 0.75rem;
+            background: rgba(138, 154, 134, 0.05);
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+        }
+        .summary-total {
+            border-top: 1px solid var(--color-outline);
+            padding-top: 0.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <wayfare-cursor></wayfare-cursor>
+    <wayfare-nav></wayfare-nav>
+    
+    <main id="swup" class="transition-fade">
+        <section class="booking-page bg-main">
+            <div class="container">
+                <a href="/explore.html" data-no-swup class="back-link">
+                    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                    Back to Explore
+                </a>
+
+                <div class="booking-shell">
+                    <section class="detail-panel" id="packageDetail">
+                        <div class="detail-body">
+                            <p style="color: var(--color-secondary);">Loading package details...</p>
+                        </div>
+                    </section>
+
+                    <aside class="booking-panel">
+                        <h2 class="booking-title">Book Your Journey</h2>
+                        <form class="booking-form" id="tourBookingForm">
+                            <input type="hidden" id="packageId">
+                            
+                            <div class="form-group" style="display: none;">
+                                <label for="packageSelect">Selected Package</label>
+                                <select id="packageSelect" class="form-control" disabled></select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" class="form-control" placeholder="John Doe" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emailAddress">Email Address</label>
+                                <input type="email" id="emailAddress" class="form-control" placeholder="john@example.com" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="travelDate">Preferred Travel Date</label>
+                                <input type="date" id="travelDate" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="travelersCount">Number of Travelers</label>
+                                <input type="number" id="travelersCount" class="form-control" min="1" value="1" required>
+                            </div>
+
+                            <div class="booking-summary" id="bookingSummary">
+                                <!-- Summary will be injected here -->
+                            </div>
+
+                            <button type="submit" class="btn-primary" id="bookingSubmitBtn" style="width: 100%; padding: 1rem; font-size: 1rem;">Confirm Booking</button>
+                        </form>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <wayfare-footer></wayfare-footer>
+    <div id="toast-container" class="toast-container"></div>
+    
+    <script type="module" src="/assets/js/booking-page.js"></script>
+    <script>
+        if (typeof lucide !== "undefined") lucide.createIcons();
+    </script>
+</body>
+</html>

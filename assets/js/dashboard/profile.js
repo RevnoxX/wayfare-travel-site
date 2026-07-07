@@ -11,8 +11,33 @@ function renderEditProfileCard() {
     s += `<input type="text" class="field-input" id="profile-name" value="${window.currentUser.name || ''}" />`;
     s += `<label class="field-label" for="profile-email">Email</label>`;
     s += `<input type="text" class="field-input" id="profile-email" value="${window.currentUser.email || ''}" readonly />`;
-    s += `<label class="field-label" for="profile-phone">Phone</label>`;
-    s += `<input type="text" class="field-input" id="profile-phone" value="${window.currentUser.phone || ''}" />`;
+    
+    let phoneStr = window.currentUser.phone || '';
+    let selectedCode = '+1';
+    let phoneNum = phoneStr;
+    const codes = ['+1', '+44', '+91', '+61', '+81', '+49', '+33', '+971'];
+    for (let code of codes) {
+        if (phoneStr.startsWith(code + ' ')) {
+            selectedCode = code;
+            phoneNum = phoneStr.substring(code.length + 1);
+            break;
+        } else if (phoneStr.startsWith(code)) {
+            selectedCode = code;
+            phoneNum = phoneStr.substring(code.length).trim();
+            break;
+        }
+    }
+    
+    s += `<label class="field-label" for="profile-phone">Phone Number</label>`;
+    s += `<div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">`;
+    s += `<select id="profile-country-code" class="field-input" style="width: 120px; margin-bottom: 0;">`;
+    for (let code of codes) {
+        s += `<option value="${code}" ${selectedCode === code ? 'selected' : ''}>${code}</option>`;
+    }
+    s += `</select>`;
+    s += `<input type="tel" class="field-input" id="profile-phone" value="${phoneNum}" style="flex: 1; margin-bottom: 0;" />`;
+    s += `</div>`;
+    
     s += `<label class="field-label" for="profile-address">Address</label>`;
     s += `<input type="text" class="field-input" id="profile-address" value="${window.currentUser.address || ''}" />`;
     s += `<button class="btn-primary profile-save-btn" onclick="saveProfile()"><i data-lucide="save" style="width:16px; height:16px; margin-right:4px; vertical-align:middle;"></i> Save Changes</button>`;
@@ -22,7 +47,9 @@ function renderEditProfileCard() {
 
 async function saveProfile() {
     const newName = document.getElementById("profile-name").value.trim();
-    const newPhone = document.getElementById("profile-phone").value.trim();
+    const newCountryCode = document.getElementById("profile-country-code").value;
+    const newPhoneNum = document.getElementById("profile-phone").value.trim();
+    const newPhone = newCountryCode + ' ' + newPhoneNum;
     const newAddress = document.getElementById("profile-address").value.trim();
 
     if (newName === "") {
@@ -31,13 +58,14 @@ async function saveProfile() {
     }
 
     if (window.supabaseClient) {
+        const { error: authError } = await window.supabaseClient.auth.updateUser({
+            data: { full_name: newName, phone: newPhone, address: newAddress }
+        });
         const { error } = await window.supabaseClient.from('profiles').update({
-            name: newName,
-            phone: newPhone,
-            address: newAddress
+            name: newName
         }).eq('id', window.currentUser.id);
         
-        if (error) {
+        if (error || authError) {
             showToast("Failed to update profile", "error");
             return;
         }
@@ -73,12 +101,12 @@ function overviewInit() {
 }
 
 function renderOverviewStats() {
-    let totalBookings = typeof bookings !== 'undefined' ? bookings.length : 0;
+    let totalBookings = window.bookings !== undefined ? window.bookings.length : 0;
     let upcomingCount = 0;
     let now = new Date();
     
-    if (typeof bookings !== 'undefined') {
-        for (let b of bookings) {
+    if (window.bookings !== undefined) {
+        for (let b of window.bookings) {
             let travel = new Date(b.travelDate);
             if (b.status.toLowerCase() === "approved" && travel > now) {
                 upcomingCount++;
@@ -86,8 +114,8 @@ function renderOverviewStats() {
         }
     }
 
-    let wishCount = typeof wishlistItems !== 'undefined' ? wishlistItems.length : 0;
-    let reviewCount = typeof reviews !== 'undefined' ? reviews.length : 0;
+    let wishCount = window.wishlistItems !== undefined ? window.wishlistItems.length : 0;
+    let reviewCount = window.reviews !== undefined ? window.reviews.length : 0;
 
     let html = buildStatCard("Total Bookings", totalBookings) +
                buildStatCard("Upcoming Trips", upcomingCount) +
@@ -105,8 +133,8 @@ function buildStatCard(label, value) {
 function renderOverviewUpcoming() {
     let best = null;
     let now = new Date();
-    if (typeof bookings !== 'undefined') {
-        for (let b of bookings) {
+    if (window.bookings !== undefined) {
+        for (let b of window.bookings) {
             let travel = new Date(b.travelDate);
             if (b.status.toLowerCase() !== "approved" || travel <= now) continue;
             if (best === null || travel < new Date(best.travelDate)) {
@@ -134,18 +162,18 @@ function renderOverviewUpcoming() {
 
 function renderOverviewActivity() {
     let items = [];
-    if (typeof bookings !== 'undefined') {
-        for (let i = 0; i < bookings.length && i < 3; i++) {
-            items.push({ text: `You booked ${bookings[i].packageName}`, time: bookings[i].bookedOn });
+    if (window.bookings !== undefined) {
+        for (let i = 0; i < window.bookings.length && i < 3; i++) {
+            items.push({ text: `You booked ${window.bookings[i].packageName}`, time: window.bookings[i].bookedOn });
         }
     }
-    if (typeof reviews !== 'undefined') {
-        for (let j = 0; j < reviews.length && j < 2; j++) {
+    if (window.reviews !== undefined) {
+        for (let j = 0; j < window.reviews.length && j < 2; j++) {
             items.push({ text: `You reviewed ${reviews[j].packageName}`, time: reviews[j].date });
         }
     }
-    if (typeof enquiries !== 'undefined') {
-        for (let k = 0; k < enquiries.length && k < 2; k++) {
+    if (window.enquiries !== undefined) {
+        for (let k = 0; k < window.enquiries.length && k < 2; k++) {
             items.push({ text: `You sent an enquiry: ${enquiries[k].subject}`, time: enquiries[k].date });
         }
     }

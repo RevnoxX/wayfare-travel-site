@@ -647,7 +647,7 @@ class WayFareNav extends HTMLElement {
             <div class="nav-tooltip">Home</div>
           </a>
 
-          <a href="index.html#collections" class="nav-item" data-id="explore">
+          <a href="/explore.html" data-no-swup class="nav-item" data-id="explore">
             <div class="nav-item-inner">
               <span class="nav-label">Explore</span>
               <div class="icon-wrapper">
@@ -672,13 +672,7 @@ class WayFareNav extends HTMLElement {
 
         <!-- Actions & Hamburger -->
         <div id="action-container" class="action-container">
-                    <!-- Search -->
-          <div class="action-wrapper">
-            <button class="action-btn" aria-label="Search" id="search-action-btn">
-              <i data-lucide="search"></i>
-            </button>
-            <div class="action-tooltip">Search</div>
-          </div>
+                    
 
           <!-- Desktop Action Icons -->
           <div id="desktop-actions" class="desktop-actions">
@@ -837,7 +831,7 @@ class WayFareNav extends HTMLElement {
     const mobileThemeToggle = this.querySelector('#mobile-theme-toggle');
 
     // --- Scroll Effect ---
-    window.addEventListener('scroll', () => {
+    const updateScrollState = () => {
       if (window.scrollY > 50) {
         navHeader.classList.add('is-scrolled');
         brandLink.classList.add('is-scrolled');
@@ -845,10 +839,16 @@ class WayFareNav extends HTMLElement {
         navHeader.classList.remove('is-scrolled');
         brandLink.classList.remove('is-scrolled');
       }
-    });
+    };
+    
+    window.addEventListener('scroll', updateScrollState);
+    updateScrollState(); // Check on init
 
     // --- Navigation Tab Active State ---
-    const currentPath = window.location.pathname;
+    let currentPath = window.location.pathname.replace(/\.html$/, '');
+    if (currentPath === '' || currentPath === '/index' || currentPath === 'index') {
+        currentPath = '/';
+    }
     let hasActiveTab = false;
 
     navItems.forEach(item => {
@@ -856,8 +856,17 @@ class WayFareNav extends HTMLElement {
       item.classList.remove('active');
 
       // Check if the link's href matches the current page URL
-      const linkHref = item.getAttribute('href');
-      if (currentPath.includes(linkHref) || (currentPath === '/' && linkHref === 'index.html')) {
+      let linkHref = item.getAttribute('href').replace(/\.html$/, '');
+      if (linkHref === '' || linkHref === 'index' || linkHref === '/index') linkHref = '/';
+
+      let match = false;
+      if (currentPath === '/' && linkHref === '/') {
+          match = true;
+      } else if (currentPath !== '/' && linkHref !== '/' && currentPath.includes(linkHref)) {
+          match = true;
+      }
+
+      if (match) {
         item.classList.add('active');
         hasActiveTab = true;
       }
@@ -933,37 +942,6 @@ class WayFareNav extends HTMLElement {
     // --- Auth Logic ---
     
     this.updateAuthState();
-    const searchBtn = this.querySelector('#search-action-btn');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => {
-            if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname === '') {
-                const tourSection = document.getElementById('collections');
-                if (tourSection) {
-                    tourSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            } else {
-                window.location.href = '/index.html#collections';
-            }
-        });
-    }
-    
-    
-    // Global interceptor for links requiring auth
-    document.addEventListener('click', (e) => {
-      const link = e.target.closest('a');
-      if (link) {
-        const href = link.getAttribute('href');
-        // Exclude internal anchors or explicit login page
-        if (href && !href.startsWith('#') && !href.includes('login.html')) {
-          const user = localStorage.getItem('wayfare_user');
-          // Allow index page to be accessed without login
-          if (!user && !href.includes('index.html') && href !== '/') {
-            e.preventDefault();
-            window.location.replace('/login.html');
-          }
-        }
-      }
-    });
   }
 
   updateAuthState() {
@@ -1094,13 +1072,25 @@ class WayFareNav extends HTMLElement {
   }
 
   updateActiveTab(path = window.location.pathname) {
-    const currentPath = path;
+    let currentPath = path.replace(/\.html$/, ''); // Strip .html for robust matching
+    if (currentPath === '' || currentPath === '/index' || currentPath === 'index') {
+        currentPath = '/';
+    }
     const navItems = this.querySelectorAll('.nav-item');
     
     navItems.forEach(item => {
       item.classList.remove('active');
-      const linkHref = item.getAttribute('href');
-      if (currentPath.includes(linkHref) || (currentPath === '/' && linkHref === 'index.html')) {
+      let linkHref = item.getAttribute('href').replace(/\.html$/, '');
+      if (linkHref === '' || linkHref === 'index' || linkHref === '/index') linkHref = '/';
+      
+      let match = false;
+      if (currentPath === '/' && linkHref === '/') {
+          match = true;
+      } else if (currentPath !== '/' && linkHref !== '/' && currentPath.includes(linkHref)) {
+          match = true;
+      }
+
+      if (match) {
         item.classList.add('active');
       }
     });

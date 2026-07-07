@@ -8,8 +8,9 @@ function showToast(message, type = "success") {
     toast.className = "toast " + (type === "error" ? "toast-error" : "toast-success");
     toast.textContent = message;
     container.appendChild(toast);
+    setTimeout(() => toast.classList.add("show"), 10);
     setTimeout(function () {
-        toast.classList.add("toast-leaving");
+        toast.classList.remove("show");
         setTimeout(function () {
             if (toast.parentNode) toast.parentNode.removeChild(toast);
         }, 300);
@@ -126,13 +127,13 @@ async function startApp() {
     document.getElementById("sidebar-avatar").textContent = window.currentUser.avatar;
     document.getElementById("topbar-avatar").textContent = window.currentUser.avatar;
 
-    if(typeof updateNotificationBadges === 'function') updateNotificationBadges();
+    if(typeof window.updateNotificationBadges === "function") window.updateNotificationBadges();
     
     // Preload data for overview
-    if (typeof bookingsInit === 'function') await bookingsInit();
-    if (typeof wishlistInit === 'function') await wishlistInit();
-    if (typeof reviewsInit === 'function') await reviewsInit();
-    if (typeof enquiriesInit === 'function') await enquiriesInit();
+    if (typeof window.bookingsInit === "function") await window.bookingsInit();
+    if (typeof window.wishlistInit === "function") await window.wishlistInit();
+    if (typeof window.reviewsInit === "function") await window.reviewsInit();
+    if (typeof window.enquiriesInit === "function") await window.enquiriesInit();
     
     const urlParams = new URLSearchParams(window.location.search);
     const targetSection = urlParams.get('section');

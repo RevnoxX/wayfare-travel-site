@@ -489,6 +489,26 @@
                                         <input type="email" id="signup-email" required placeholder="name@example.com">
                                     </div>
                                     <div class="form-group">
+                                        <label>Phone Number</label>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <select id="signup-country-code" style="padding: 0.75rem; border: 1px solid var(--color-border); border-radius: 4px; background: var(--color-bg); color: var(--color-text);">
+                                                <option value="+1">+1 (US)</option>
+                                                <option value="+44">+44 (UK)</option>
+                                                <option value="+91">+91 (IN)</option>
+                                                <option value="+61">+61 (AU)</option>
+                                                <option value="+81">+81 (JP)</option>
+                                                <option value="+49">+49 (DE)</option>
+                                                <option value="+33">+33 (FR)</option>
+                                                <option value="+971">+971 (AE)</option>
+                                            </select>
+                                            <input type="tel" id="signup-phone" required placeholder="1234567890" style="flex: 1; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: 4px; background: var(--color-bg); color: var(--color-text);">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" id="signup-address" required placeholder="123 Main St, City, Country">
+                                    </div>
+                                    <div class="form-group">
                                         <label>Password</label>
                                         <input type="password" id="signup-password" required placeholder="••••••••">
                                     </div>
@@ -611,12 +631,14 @@
                 const confirmPassword = document.getElementById('signup-confirm-password').value;
                 const email = document.getElementById('signup-email').value;
                 const name = document.getElementById('signup-name').value;
+                const countryCode = document.getElementById('signup-country-code').value;
+                const phone = countryCode + ' ' + document.getElementById('signup-phone').value;
+                const address = document.getElementById('signup-address').value;
                 
                 if (!email) {
                     showToast('Email is required', 'error');
                     return;
                 }
-
                 if (password.length < 6) {
                     showToast('Please create a strong password (at least 6 characters)', 'error');
                     return;
@@ -628,33 +650,49 @@
                 }
                 
                 if (window.supabaseClient) {
-                    const { data, error } = await window.supabaseClient.auth.signUp({
-                        email: email,
-                        password: password,
-                        options: { data: { full_name: name } }
-                    });
-                    if (error) {
-                        if (error.message.toLowerCase().includes('already registered') || error.message.toLowerCase().includes('already exists')) {
-                            showToast('Email already exists. Please sign in instead.', 'error');
-                        } else {
-                            showToast(error.message, 'error');
-                        }
-                        return;
-                    }
-                    if (!data.user) {
-                        showToast('Signup failed', 'error');
-                        return;
-                    }
-                    
                     try {
-                        await window.supabaseClient.from('profiles').insert([
-                            { id: data.user.id, email: data.user.email, name: name, role: 'user' }
-                        ]);
-                    } catch(e) {
-                        console.error('Error creating profile:', e);
+                        const { data, error } = await window.supabaseClient.auth.signUp({
+                            email: email,
+                            password: password,
+                            options: { data: { full_name: name, phone: phone, address: address } }
+                        });
+                        if (error) {
+                            if (error.message.toLowerCase().includes('already registered') || error.message.toLowerCase().includes('already exists')) {
+                                showToast('Email already exists. Please sign in instead.', 'error');
+                            } else {
+                                showToast(error.message, 'error');
+                            }
+                            return;
+                        }
+                        if (!data.user) {
+                            showToast('Signup failed', 'error');
+                            return;
+                        }
+                        
+                        try {
+                            const { error: profileError } = await window.supabaseClient.from('profiles').insert([
+                                { id: data.user.id, email: data.user.email, name: name, role: 'user' }
+                            ]);
+                            if (profileError) {
+                                console.error('Error creating profile:', profileError);
+                            }
+                        } catch(e) {
+                            console.error('Exception creating profile:', e);
+                        }
+                        
+                        if (!data.session) {
+                            showToast('Signup successful! Please check your email to confirm your account.', 'success');
+                            setTimeout(() => {
+                                window.switchTab('signin');
+                            }, 2000);
+                            return;
+                        }
+                        
+                        user = { id: data.user.id, email: data.user.email, name: name, role: 'user', phone: phone, address: address };
+                    } catch (e) {
+                        showToast(e.message || 'An error occurred during signup', 'error');
+                        return;
                     }
-                    
-                    user = { id: data.user.id, email: data.user.email, name: name, role: 'user' };
                 } else {
                     showToast('Database connection missing', 'error');
                     return;
@@ -669,41 +707,52 @@
                 }
 
                 if (window.supabaseClient) {
-                    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-                        email: email,
-                        password: password
-                    });
-                    if (error) {
-                        if (error.message.toLowerCase().includes('invalid login credentials')) {
-                            showToast('Incorrect email or password.', 'error');
-                        } else {
-                            showToast(error.message, 'error');
-                        }
-                        return;
-                    }
-                    if (!data.user) {
-                        showToast('Signin failed', 'error');
-                        return;
-                    }
-                    
-                    let profileName = data.user.user_metadata?.full_name || email.split('@')[0];
-                    let role = 'user';
                     try {
-                        const { data: profileData } = await window.supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
-                        if (profileData) {
-                            profileName = profileData.name || profileName;
-                            role = profileData.role || 'user';
+                        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                            email: email,
+                            password: password
+                        });
+                        if (error) {
+                            if (error.message.toLowerCase().includes('invalid login credentials')) {
+                                showToast('Incorrect email or password.', 'error');
+                            } else if (error.message.toLowerCase().includes('email not confirmed')) {
+                                showToast('Please confirm your email address before signing in.', 'error');
+                            } else {
+                                showToast(error.message, 'error');
+                            }
+                            return;
                         }
-                    } catch(e) {
-                        console.error('Error fetching profile:', e);
-                    }
+                        if (!data.user) {
+                            showToast('Signin failed', 'error');
+                            return;
+                        }
+                        
+                        let profileName = data.user.user_metadata?.full_name || email.split('@')[0];
+                        let phone = data.user.user_metadata?.phone || '';
+                        let address = data.user.user_metadata?.address || '';
+                        let role = 'user';
+                        try {
+                            const { data: profileData } = await window.supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
+                            if (profileData) {
+                                profileName = profileData.name || profileName;
+                                role = profileData.role || 'user';
+                            }
+                        } catch(e) {
+                            console.error('Error fetching profile:', e);
+                        }
 
-                    user = { 
-                        id: data.user.id, 
-                        email: data.user.email, 
-                        name: profileName, 
-                        role: role 
-                    };
+                        user = { 
+                            id: data.user.id, 
+                            email: data.user.email, 
+                            name: profileName, 
+                            role: role,
+                            phone: phone,
+                            address: address
+                        };
+                    } catch (e) {
+                        showToast(e.message || 'An error occurred during signin', 'error');
+                        return;
+                    }
                 } else {
                     showToast('Database connection missing', 'error');
                     return;
@@ -743,8 +792,13 @@
             container.appendChild(toast);
             if (typeof lucide !== "undefined") lucide.createIcons({ root: toast });
             
+            // Trigger animation
             setTimeout(() => {
-                toast.classList.add('fade-out');
+                toast.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }

@@ -25,6 +25,7 @@ async function wishlistInit() {
     } catch (err) {
         console.error(err);
     }
+    window.wishlistItems = wishlistItems;
     renderWishlist();
 }
 

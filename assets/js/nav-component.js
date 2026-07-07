@@ -626,10 +626,7 @@ class WayFareNav extends HTMLElement {
         <!-- Brand Logo & Name -->
         <a href="#" id="brand-link" class="brand-link">
           <div class="logo-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-            </svg>
+            <img src="../final/assets/favicon.png" alt="WayFare Nomad Logo" class="logo-container">
           </div>
           <span class="site-name"><span class="brand-way">Way</span><span class="brand-fare">Fare</span></span>
         </a>

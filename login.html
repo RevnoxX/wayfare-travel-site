@@ -612,8 +612,18 @@
                 const email = document.getElementById('signup-email').value;
                 const name = document.getElementById('signup-name').value;
                 
+                if (!email) {
+                    showToast('Email is required', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showToast('Please create a strong password (at least 6 characters)', 'error');
+                    return;
+                }
+                
                 if (password !== confirmPassword) {
-                    showToast('Passwords do not match', 'error');
+                    showToast('Passwords do not match. Please try again', 'error');
                     return;
                 }
                 
@@ -624,13 +634,26 @@
                         options: { data: { full_name: name } }
                     });
                     if (error) {
-                        showToast(error.message, 'error');
+                        if (error.message.toLowerCase().includes('already registered') || error.message.toLowerCase().includes('already exists')) {
+                            showToast('Email already exists. Please sign in instead.', 'error');
+                        } else {
+                            showToast(error.message, 'error');
+                        }
                         return;
                     }
                     if (!data.user) {
                         showToast('Signup failed', 'error');
                         return;
                     }
+                    
+                    try {
+                        await window.supabaseClient.from('profiles').insert([
+                            { id: data.user.id, email: data.user.email, name: name, role: 'user' }
+                        ]);
+                    } catch(e) {
+                        console.error('Error creating profile:', e);
+                    }
+                    
                     user = { id: data.user.id, email: data.user.email, name: name, role: 'user' };
                 } else {
                     showToast('Database connection missing', 'error');
@@ -640,24 +663,46 @@
                 const email = document.getElementById('signin-email').value;
                 const password = document.getElementById('signin-password').value;
                 
+                if (!email || !password) {
+                    showToast('Email and password are required', 'error');
+                    return;
+                }
+
                 if (window.supabaseClient) {
                     const { data, error } = await window.supabaseClient.auth.signInWithPassword({
                         email: email,
                         password: password
                     });
                     if (error) {
-                        showToast(error.message, 'error');
+                        if (error.message.toLowerCase().includes('invalid login credentials')) {
+                            showToast('Incorrect email or password.', 'error');
+                        } else {
+                            showToast(error.message, 'error');
+                        }
                         return;
                     }
                     if (!data.user) {
                         showToast('Signin failed', 'error');
                         return;
                     }
+                    
+                    let profileName = data.user.user_metadata?.full_name || email.split('@')[0];
+                    let role = 'user';
+                    try {
+                        const { data: profileData } = await window.supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
+                        if (profileData) {
+                            profileName = profileData.name || profileName;
+                            role = profileData.role || 'user';
+                        }
+                    } catch(e) {
+                        console.error('Error fetching profile:', e);
+                    }
+
                     user = { 
                         id: data.user.id, 
                         email: data.user.email, 
-                        name: data.user.user_metadata?.full_name || email.split('@')[0], 
-                        role: 'user' 
+                        name: profileName, 
+                        role: role 
                     };
                 } else {
                     showToast('Database connection missing', 'error');

@@ -626,7 +626,7 @@ class WayFareNav extends HTMLElement {
         <!-- Brand Logo & Name -->
         <a href="#" id="brand-link" class="brand-link">
           <div class="logo-container">
-            <img src="./favicon.png" alt="WayFare Nomad Logo" class="logo-container">
+            <img src="../assets/favicon.png" alt="WayFare Nomad Logo">
           </div>
           <span class="site-name"><span class="brand-way">Way</span><span class="brand-fare">Fare</span></span>
         </a>

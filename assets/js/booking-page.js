@@ -145,10 +145,15 @@ async function handleBookingSubmit(e) {
             throw new Error("Supabase client not initialized");
         }
 
-        window.showToast("Booking confirmed successfully!", "success");
+        window.showToast("Booking recorded! Redirecting to payment...", "success");
         setTimeout(() => {
-            if (user) window.location.href = '/dashboard.html';
-            else window.location.href = '/explore.html';
+            const params = new URLSearchParams({
+                amount: total,
+                dest: selectedPackage.destination || '',
+                name: selectedPackage.name || '',
+                user: user ? '1' : '0'
+            });
+            window.location.href = `/payment.html?${params.toString()}`;
         }, 1500);
 
     } catch(err) {

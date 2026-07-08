@@ -1,3 +1,5 @@
+import faviconUrl from '../favicon.png';
+
 class FooterComponent extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
@@ -6,7 +8,7 @@ class FooterComponent extends HTMLElement {
                     <div class="footer-grid">
                         <div class="footer-brand">
                             <h2 class="footer-logo">
-                                <img src="/assets/favicon.png" alt="WayFare Logo" style="width: 28px; height: 28px; object-fit: contain; margin-right: 0.5rem; vertical-align: middle; display: inline-block;">
+                                <img src="${faviconUrl}" alt="WayFare Logo" style="width: 28px; height: 28px; object-fit: contain; margin-right: 0.5rem; vertical-align: middle; display: inline-block;">
                                 <span class="brand-way">Way</span><span class="brand-fare">Fare</span>
                             </h2>
                             <p class="footer-desc">Curating authentic, slow travel experiences for the modern explorer who seeks connection over consumption.</p>

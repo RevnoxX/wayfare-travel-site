@@ -1,3 +1,5 @@
+import faviconUrl from '../favicon.png';
+
 class WayFareNav extends HTMLElement {
   connectedCallback() {
     // Inject the HTML and CSS directly into the component
@@ -629,7 +631,7 @@ class WayFareNav extends HTMLElement {
         <!-- Brand Logo & Name -->
         <a href="#" id="brand-link" class="brand-link">
           <div class="logo-container">
-            <img src="/assets/favicon.png" alt="WayFare Nomad Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            <img src="${faviconUrl}" alt="WayFare Nomad Logo" style="width: 100%; height: 100%; object-fit: contain;">
           </div>
           <span class="site-name"><span class="brand-way">Way</span><span class="brand-fare">Fare</span></span>
         </a>

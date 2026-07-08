@@ -6,7 +6,7 @@ class FooterComponent extends HTMLElement {
                     <div class="footer-grid">
                         <div class="footer-brand">
                             <h2 class="footer-logo">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass" style="color: var(--color-primary); margin-right: 0.5rem; vertical-align: middle; display: inline-block;"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                                <img src="/assets/favicon.png" alt="WayFare Logo" style="width: 28px; height: 28px; object-fit: contain; margin-right: 0.5rem; vertical-align: middle; display: inline-block;">
                                 <span class="brand-way">Way</span><span class="brand-fare">Fare</span>
                             </h2>
                             <p class="footer-desc">Curating authentic, slow travel experiences for the modern explorer who seeks connection over consumption.</p>

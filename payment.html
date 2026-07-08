@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WayFare | Secure Payment</title>
+    
+    <link rel="stylesheet" href="/assets/css/vanilla.css">
+    <link rel="stylesheet" href="/assets/css/payment.css">
+    
+    <!-- Custom Elements -->
+    <script type="module" src="/assets/js/nav-component.js"></script>
+    <script type="module" src="/assets/js/footer-component.js"></script>
+    <script type="module" src="/assets/js/cursor-component.js"></script>
+    <script src="https://unpkg.com/swup@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <wayfare-cursor></wayfare-cursor>
+    
+    <main id="swup" class="transition-fade">
+        <section class="payment-page">
+            
+            <div class="flight-path" id="flightPath">
+                <svg width="2000" height="2000" viewBox="0 0 2000 2000" preserveAspectRatio="none">
+                    <path d="M 1000 1000 Q 1200 800, 1500 500 T 2500 -500" />
+                </svg>
+            </div>
+
+            <div class="airplane-wrapper" id="airplaneWrapper">
+                <svg class="paper-airplane-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 2L11 13" />
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+                </svg>
+            </div>
+
+            <div class="payment-scene">
+                <div class="payment-card-wrap" id="paymentCardWrap">
+                    
+                    <!-- FRONTSIDE -->
+                    <div class="payment-card-front">
+                        <h2 class="payment-title">Secure Checkout</h2>
+                        <p class="payment-subtitle">Please enter your payment details below</p>
+
+                        <div class="payment-summary">
+                            <div class="payment-summary-row">
+                                <span style="color:var(--color-secondary);">Destination</span>
+                                <strong id="payDest">Loading...</strong>
+                            </div>
+                            <div class="payment-summary-row">
+                                <span style="color:var(--color-secondary);">Package</span>
+                                <strong id="payPackage">Loading...</strong>
+                            </div>
+                            <div class="payment-summary-row" style="margin-top:0.5rem; border-top:1px solid var(--color-outline); padding-top:0.5rem;">
+                                <span>Total Amount</span>
+                                <strong id="payTotal" style="color:var(--color-primary); font-size:1.1rem;">₹0</strong>
+                            </div>
+                        </div>
+
+                        <form id="paymentForm">
+                            <div class="payment-form-group">
+                                <label>Cardholder Name</label>
+                                <input type="text" class="payment-input" value="John Doe" required>
+                            </div>
+                            <div class="payment-form-group">
+                                <label>Card Number</label>
+                                <input type="text" class="payment-input" value="4444 4444 4444 4444" required>
+                            </div>
+                            <div class="payment-row">
+                                <div class="payment-form-group">
+                                    <label>Expiry</label>
+                                    <input type="text" class="payment-input" value="12/26" required>
+                                </div>
+                                <div class="payment-form-group">
+                                    <label>CVC</label>
+                                    <input type="text" class="payment-input" value="123" required>
+                                </div>
+                            </div>
+                            <button type="submit" id="confirmPaymentBtn" class="btn-pay">Confirm Payment</button>
+                        </form>
+                    </div> <!-- /FRONTSIDE -->
+
+                    <!-- BACKSIDE -->
+                    <div class="payment-card-back">
+                        
+                        <div class="postcard-header">
+                            <div>
+                                <h3 class="postcard-title">WayFare<br>Boarding Pass</h3>
+                                <p style="font-size:0.8rem; color:#8a7c73; margin-top:0.25rem;">Vintage Edition</p>
+                            </div>
+                            <div class="postcard-stamp-box">
+                                <svg class="postcard-stamp-svg-bg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="#a49182" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+                                    <circle cx="12" cy="12" r="7" stroke="#a49182" stroke-width="1" fill="none"/>
+                                    <path d="M12 7V17M7 12H17" stroke="#a49182" stroke-width="1"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="postcard-divider">
+                            <div class="hand-drawn-line">
+                                <svg viewBox="0 0 100 10" preserveAspectRatio="none">
+                                    <path d="M0,5 Q25,2 50,5 T100,5"/>
+                                </svg>
+                            </div>
+                            <div class="hand-drawn-line">
+                                <svg viewBox="0 0 100 10" preserveAspectRatio="none">
+                                    <path d="M0,5 Q20,8 50,5 T100,5"/>
+                                </svg>
+                            </div>
+                            <div class="hand-drawn-line">
+                                <svg viewBox="0 0 100 10" preserveAspectRatio="none">
+                                    <path d="M0,5 Q30,1 50,5 T100,5"/>
+                                </svg>
+                            </div>
+                            <div class="hand-drawn-line">
+                                <svg viewBox="0 0 100 10" preserveAspectRatio="none">
+                                    <path d="M0,5 Q10,7 50,5 T100,5"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- WayFare Approved Stamp overlay -->
+                        <svg class="approval-stamp" id="approvalStamp" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Outer double border -->
+                            <rect x="5" y="5" width="190" height="90" rx="10" stroke="#d55b46" stroke-width="4" fill="none"/>
+                            <rect x="12" y="12" width="176" height="76" rx="6" stroke="#d55b46" stroke-width="2" fill="none"/>
+                            
+                            <!-- APPROVED Text -->
+                            <text x="100" y="55" font-family="'Times New Roman', serif" font-size="28" font-weight="900" fill="#d55b46" text-anchor="middle" letter-spacing="2">APPROVED</text>
+                            
+                            <!-- WayFare Subtitle -->
+                            <text x="100" y="75" font-family="'Courier New', monospace" font-size="12" font-weight="bold" fill="#d55b46" text-anchor="middle" letter-spacing="4">WAYFARE</text>
+                            
+                            <!-- Small date mockup -->
+                            <text x="100" y="30" font-family="'Courier New', monospace" font-size="10" fill="#d55b46" text-anchor="middle">TX-701A SECURE</text>
+
+                            <!-- Subtle roughening / imperfections (simulated with some messy lines) -->
+                            <path d="M15 15 L25 18 M180 80 L185 85 M10 80 L15 75 M180 15 L175 25" stroke="#d55b46" stroke-width="1.5" opacity="0.6"/>
+                        </svg>
+                        
+                    </div> <!-- /BACKSIDE -->
+                    
+                </div>
+            </div>
+            
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/payment.js"></script>
+    <script>
+        if (typeof lucide !== "undefined") lucide.createIcons();
+    </script>
+</body>
+</html>

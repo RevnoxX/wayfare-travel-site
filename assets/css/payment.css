@@ -1,0 +1,398 @@
+.payment-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    overflow: hidden; /* Hide flying airplane */
+    padding: 2rem;
+}
+
+.payment-scene {
+    width: 100%;
+    max-width: 450px;
+    perspective: 1500px;
+    position: relative;
+    z-index: 10;
+}
+
+.payment-card-wrap {
+    width: 100%;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+}
+
+.payment-card-wrap.flipped {
+    transform: rotateY(180deg);
+}
+
+.payment-card-wrap.origami-morph {
+    animation: morphCard 0.5s forwards ease-in-out;
+}
+
+/* Card Faces */
+.payment-card-front,
+.payment-card-back {
+    width: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    background: var(--color-card);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    -webkit-backface-visibility: hidden;
+}
+
+.payment-card-front {
+    --color-text: #ffffff;
+    --color-secondary: rgba(255, 255, 255, 0.75);
+    --color-bg: rgba(255, 255, 255, 0.05);
+    --color-outline: rgba(255, 255, 255, 0.15);
+
+    color: var(--color-text);
+    position: relative;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    background: 
+        radial-gradient(circle at 0% 0%, #4a5648 0%, transparent 70%),
+        radial-gradient(circle at 100% 100%, #1a2018 0%, #111510 100%);
+    box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.2), 
+        inset 0 -1px 3px rgba(0, 0, 0, 0.5), 
+        0 15px 35px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* 3D Glass Sheen */
+.payment-card-front::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 150%;
+    height: 200%;
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 50%, transparent 100%);
+    transform: rotate(20deg);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.payment-card-front > * {
+    position: relative;
+    z-index: 2;
+}
+
+.payment-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: rotateY(180deg);
+    padding: 2rem;
+    background-color: #f5eedc; /* vintage paper color */
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px), linear-gradient(to right, #f5eedc, #ebe2c9);
+    border: 1px solid #dcd3c1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Back styling - Vintage postcard */
+.postcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.postcard-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #5c4b40;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.postcard-stamp-box {
+    width: 60px;
+    height: 75px;
+    border: 1px dashed #a49182;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.postcard-stamp-svg-bg {
+    width: 100%;
+    height: 100%;
+    fill: #a49182;
+    opacity: 0.2;
+}
+
+.postcard-divider {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.hand-drawn-line {
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    opacity: 1;
+}
+
+.hand-drawn-line svg {
+    width: 100%;
+    height: 10px;
+    display: block;
+    overflow: visible;
+}
+
+.hand-drawn-line path {
+    fill: none;
+    stroke: #8a7c73;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+}
+
+/* Front Form styles */
+.payment-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+
+.payment-subtitle {
+    color: var(--color-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+}
+
+.payment-summary {
+    background: var(--color-bg);
+    border: 1px solid var(--color-outline);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+.payment-summary-row:last-child {
+    margin-bottom: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-outline);
+    font-weight: 700;
+}
+
+.payment-form-group {
+    margin-bottom: 1.2rem;
+}
+
+.payment-form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.payment-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--color-outline);
+    border-radius: 6px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 1rem;
+}
+.payment-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.payment-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.btn-pay {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-pay:hover:not(:disabled) {
+    opacity: 0.9;
+}
+.btn-pay:active:not(:disabled) {
+    transform: scale(0.98);
+}
+.btn-pay:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Animations */
+.approval-stamp {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250px;
+    height: auto;
+    margin-top: -125px;
+    margin-left: -125px;
+    opacity: 0;
+    transform: scale(3) rotate(-15deg);
+    /* red terracotta color stamp */
+    fill: #d55b46;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.approval-stamp.stamp-anim {
+    animation: stampDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Airplane and Trail */
+.airplane-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    opacity: 0;
+    transform: scale(0.5);
+    z-index: 20;
+    pointer-events: none;
+}
+
+.airplane-wrapper.appear {
+    animation: airplaneFadeIn 0.5s ease-out forwards;
+}
+
+.airplane-wrapper.appear.takeoff {
+    animation: takeoffFlight 1.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+    opacity: 1;
+}
+
+.paper-airplane-svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.flight-path {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2000px;
+    height: 2000px;
+    pointer-events: none;
+    z-index: 15;
+    opacity: 0;
+}
+
+.flight-path path {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+    stroke-dasharray: 8 8;
+    stroke-dashoffset: 2000;
+    opacity: 0.4;
+}
+
+.flight-path.draw {
+    opacity: 1;
+}
+
+.flight-path.draw path {
+    animation: drawPath 1.5s linear forwards;
+}
+
+
+/* Keyframes */
+@keyframes stampDown {
+    0% {
+        opacity: 0;
+        transform: scale(3) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(0.9) rotate(-12deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(-10deg);
+    }
+}
+
+@keyframes morphCard {
+    0% {
+        transform: rotateY(180deg) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateY(180deg) scale(0.2);
+        opacity: 0;
+    }
+}
+
+@keyframes airplaneFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes takeoffFlight {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(30vw, -30vh) scale(1.2) rotate(15deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(120vw, -120vh) scale(1.5) rotate(30deg);
+        opacity: 1;
+    }
+}
+
+@keyframes drawPath {
+    0% {
+        stroke-dashoffset: 2000;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}

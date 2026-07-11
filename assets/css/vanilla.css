@@ -925,6 +925,11 @@ html.dark .contact-form-wrapper {
     box-shadow: 0 0 0 4px rgba(181, 101, 84, 0.1);
 }
 
+.form-select option {
+    background-color: var(--color-card);
+    color: var(--color-text);
+}
+
 .form-textarea {
     min-height: 150px;
     resize: vertical;
